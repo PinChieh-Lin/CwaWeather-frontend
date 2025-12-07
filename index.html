@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>森森天氣</title>
+    <title>星空天氣</title>
     <link rel="icon" type="image/png" href="./icon-v2.png">
     <link rel="apple-touch-icon" href="./icon-v2.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./icon-v2.png">
@@ -15,14 +15,15 @@
 
     <style>
         :root {
-            --ac-green: #7DE1A9;
-            --ac-bg-pattern: #8FD8AF;
-            --ac-cream: #FFFEF2;
-            --ac-yellow: #F9F195;
-            --ac-brown: #796452;
-            --ac-blue: #4FB5D9;
-            --ac-dark: #58504A;
-            --ac-card-border: #E6E0C8;
+            --star-bg: #0a1440;
+            --star-gradient: linear-gradient(135deg, #1a237e 0%, #0a1440 100%);
+            --star-card: rgba(20, 30, 60, 0.85);
+            --star-border: #3a4a7c;
+            --star-yellow: #ffe066;
+            --star-white: #f8f9fa;
+            --star-text: #e0e6ff;
+            --star-accent: #7fc7ff;
+            --star-shadow: 0 10px 30px rgba(20,30,60,0.4);
         }
 
         * {
@@ -34,15 +35,29 @@
 
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: var(--ac-green);
-            /* 更細緻的斜紋背景 */
-            background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.2) 20px, rgba(255, 255, 255, 0.2) 40px);
+            background: var(--star-gradient);
             min-height: 100vh;
-            color: var(--ac-dark);
-            /* 防止 iOS 左右滑動 */
+            color: var(--star-text);
             overflow-x: hidden;
             padding-bottom: 20px;
+            position: relative;
+        }
+
+        /* 星空背景星星 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 20% 30%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 80% 60%, #fff 1.5px, transparent 1.5px),
+                radial-gradient(circle at 50% 80%, #ffe066 1.2px, transparent 1.2px),
+                radial-gradient(circle at 70% 20%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 30% 70%, #7fc7ff 1px, transparent 1px);
+            background-size: 100vw 100vh;
+            opacity: 0.5;
         }
 
         /* 頂部狀態列 */
@@ -51,29 +66,30 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(10, 20, 64, 0.7);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 2px solid var(--star-border);
         }
 
         .location-pill {
-            background: var(--ac-yellow);
-            color: var(--ac-brown);
+            background: var(--star-yellow);
+            color: #2d2d2d;
             padding: 5px 15px;
             border-radius: 20px;
             font-weight: 900;
             font-size: 1.1rem;
             transform: rotate(-2deg);
-            border: 2px solid white;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--star-white);
+            box-shadow: 2px 2px 0 rgba(10, 20, 64, 0.15);
         }
 
         .update-pill {
             font-size: 0.8rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.2);
+            color: var(--star-white);
+            background: rgba(127, 199, 255, 0.2);
             padding: 4px 10px;
             border-radius: 12px;
         }
@@ -81,18 +97,19 @@
         .container {
             padding: 20px;
             max-width: 600px;
-            /* 限制在大手機寬度 */
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         /* === 核心：今日焦點卡片 === */
         .hero-card {
-            background: var(--ac-cream);
+            background: var(--star-card);
             border-radius: 35px;
             padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: 4px solid white;
+            box-shadow: var(--star-shadow);
+            border: 3px solid var(--star-border);
             margin-bottom: 25px;
             position: relative;
         }
@@ -103,13 +120,13 @@
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--ac-blue);
-            color: white;
+            background: var(--star-accent);
+            color: var(--star-white);
             padding: 5px 20px;
             border-radius: 20px;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--star-white);
+            box-shadow: 0 4px 0 rgba(127, 199, 255, 0.15);
         }
 
         .hero-temp-container {
@@ -141,13 +158,13 @@
         .hero-temp {
             font-size: 4.5rem;
             font-weight: 900;
-            color: var(--ac-brown);
+            color: var(--star-yellow);
             line-height: 1;
         }
 
         .hero-desc {
             font-size: 1.5rem;
-            color: #8A7B70;
+            color: var(--star-accent);
             margin-bottom: 20px;
             font-weight: bold;
         }
@@ -159,14 +176,14 @@
             gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px dashed #E0D8C0;
+            border-top: 2px dashed var(--star-border);
         }
 
         .advice-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(127, 199, 255, 0.12);
             padding: 10px;
             border-radius: 20px;
         }
@@ -179,7 +196,7 @@
         .advice-text {
             font-size: 1.4rem;
             font-weight: 900;
-            color: var(--ac-brown);
+            color: var(--star-yellow);
             margin: 5px 0;
             line-height: 1.2;
         }
@@ -187,11 +204,11 @@
         /* === 稍後預報：橫向滑動區 === */
         .section-title {
             font-size: 1.2rem;
-            color: white;
+            color: var(--star-white);
             margin-bottom: 15px;
             margin-left: 10px;
             font-weight: 900;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+            text-shadow: 1px 1px 0 rgba(127, 199, 255, 0.15);
         }
 
         .scroll-container {
@@ -210,18 +227,17 @@
 
         .mini-card {
             min-width: 140px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(20, 30, 60, 0.85);
             border-radius: 25px;
             padding: 20px 15px;
             text-align: center;
-            border: 3px solid white;
+            border: 2px solid var(--star-border);
             flex-shrink: 0;
-            /* 防止被擠壓 */
         }
 
         .mini-time {
-            background: var(--ac-green);
-            color: white;
+            background: var(--star-accent);
+            color: var(--star-white);
             padding: 3px 10px;
             border-radius: 10px;
             font-size: 0.8rem;
@@ -238,7 +254,7 @@
         .mini-temp {
             font-size: 1.2rem;
             font-weight: 800;
-            color: var(--ac-dark);
+            color: var(--star-yellow);
         }
 
         /* Loading 畫面 */
@@ -248,7 +264,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--ac-green);
+            background: var(--star-gradient);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -264,7 +280,7 @@
         <p style="color: white; font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
     </div>
     <div class="status-bar">
-        <div class="location-pill">📍 高雄</div>
+        <div class="location-pill">📍 臺中</div>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
 
@@ -280,7 +296,7 @@
     </div>
 
     <script>
-        const API_URL = "https://cwa-backend-api.zeabur.app/api/weather/kaohsiung";
+        const API_URL = "https://weather-taichungapp.zeabur.app/api/weather/kaohsiung";
 
         function getWeatherIcon(weather) {
             if (!weather) return "🌤️";
